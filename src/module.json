@@ -1,0 +1,36 @@
+{
+  "name": "animation-preview",
+  "title": "Animation Preview",
+  "description": "<p>This module extends the FilePicker in such a way, that you will get an actual preview of video files instead of just the video icon.</p>",
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "version": "0.0.0",
+  "author": "eXaminator",
+  "authors": [
+    {
+      "name": "eXaminator",
+      "discord": "eXaminator#0079",
+      "twitter": "@eXXaminator"
+    }
+  ],
+  "esmodules": ["index.js"],
+  "styles": ["index.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "de",
+      "name": "Deutsch",
+      "path": "lang/de.json"
+    }
+  ],
+  "minimumCoreVersion": "0.8.6",
+  "compatibleCoreVersion": "0.8.7",
+  "manifestPlusVersion": "1.0.0",
+  "allowBugReporter": true,
+  "bugs": ""
+}
