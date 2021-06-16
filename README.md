@@ -10,4 +10,4 @@ This is a simple module for [Foundry Virtual Tabletop](http://foundryvtt.com) th
 Each video file will start playing when you hover the preview image with your mouse and stop playing once your mouse
 leaves the preview.
 
-![video](assets/animation-preview.mp4?raw=true)
+![Animation that shows how the module works](assets/animation-preview.gif)
