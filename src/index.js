@@ -5,25 +5,29 @@ Hooks.on('renderFilePicker', (filePicker, html) => {
         const path = $parent.data('path');
         const width = $img.attr('width');
         const height = $img.attr('height');
-        const $video = $(`<video preload="metadata" class="fas video-preview" src="${path}" loop width="${width}" height="${height}"></video>`);
+        const $video = $(`<video class="fas video-preview" loop width="${width}" height="${height}"></video>`);
         $img.replaceWith($video);
 
         const video = $video.get(0);
+        let playTimeout = null;
+        $parent.addClass('video-parent -loading');
 
-        video.addEventListener('durationchange', () => {
-            video.currentTime = Math.round(video.duration / 2);
+        video.addEventListener('loadeddata', () => {
+            $parent.removeClass('-loading');
         }, false);
-
-        $parent.addClass('video-parent');
 
         $parent.hover(
             () => {
-                video.currentTime = 0;
-                video.play().catch(() => null);
+                playTimeout = setTimeout(() => {
+                    if (!video.src) video.src = path;
+                    video.currentTime = 0;
+                    video.play().catch(e => console.error(e));
+                }, !!video.src ? 0 : 750);
             },
             () => {
+                clearTimeout(playTimeout);
                 video.pause();
-                video.currentTime = Math.round(video.duration / 2);
+                video.currentTime = 0;
             },
         );
     });

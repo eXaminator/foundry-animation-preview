@@ -33,6 +33,12 @@
     opacity: 0;
 }
 
+.filepicker .video-parent.-loading:hover:after {
+    opacity: .8;
+    content: '\f021';
+    animation: animation-preview-spin 1.5s linear infinite;
+}
+
 .filepicker .video-preview {
     box-sizing: border-box;
     border: 1px solid #000;
@@ -61,4 +67,10 @@
     object-position: 50% 50%;
     margin-right: 10px;
     border: none;
+}
+
+@keyframes animation-preview-spin {
+    100% {
+        transform: rotate(360deg);
+    }
 }
