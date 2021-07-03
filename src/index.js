@@ -1,9 +1,3 @@
-Hooks.on('init', () => {
-    /*game.settings.register('animation-preview', '', {
-
-    });*/
-});
-
 Hooks.on('renderFilePicker', (filePicker, html) => {
     html.find('[data-src="icons/svg/video.svg"]').each((idx, img) => {
         const $img = $(img);
