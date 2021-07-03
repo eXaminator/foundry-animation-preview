@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/eXaminator/foundry-animation-preview/compare/1.0.1...1.0.2) (2021-07-03)
+
+
+### Bug Fixes
+
+* add support for Foundry 0.8.8 ([dcd669c](https://github.com/eXaminator/foundry-animation-preview/commit/dcd669c4fe2e7aca9e2630f864fef7081439ee94))
+
 ## [1.0.1](https://github.com/eXaminator/foundry-animation-preview/compare/1.0.0...1.0.1) (2021-07-03)
 
 
