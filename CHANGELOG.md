@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/eXaminator/foundry-animation-preview/compare/1.0.2...1.0.3) (2021-09-01)
+
+
+### Bug Fixes
+
+* don't show preview in list view ([d341981](https://github.com/eXaminator/foundry-animation-preview/commit/d34198180bd687510a661fa280fe83b441620b00))
+
 ## [1.0.2](https://github.com/eXaminator/foundry-animation-preview/compare/1.0.1...1.0.2) (2021-07-03)
 
 
