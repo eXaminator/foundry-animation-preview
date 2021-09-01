@@ -1,5 +1,5 @@
 Hooks.on('renderFilePicker', (filePicker, html) => {
-    html.find('[data-src="icons/svg/video.svg"]').each((idx, img) => {
+    html.find('[data-src="icons/svg/video.svg"]:visible').each((idx, img) => {
         const $img = $(img);
         const $parent = $img.closest('[data-path]');
         const path = $parent.data('path');
