@@ -9,11 +9,11 @@ plugins:
     - '@semantic-release/git'
     -   - '@google/semantic-release-replace-plugin'
         -   replacements:
-            -   files: [ dist/module.json ]
-                from: "\"version\": \"0.0.0\""
-                to: "\"version\": \"${nextRelease.version}\""
+                -   files: [ dist/module.json ]
+                    from: "__VERSION__"
+                    to: "${nextRelease.version}"
     -   - '@semantic-release/exec'
-        - prepareCmd: cd ./dist && zip -r ../module.zip .
+        - prepareCmd: apt-get update && apt-get install zip && cd ./dist && zip -r ../module.zip .
     -   - '@semantic-release/github'
         - assets:
             -   path: dist/module.json
