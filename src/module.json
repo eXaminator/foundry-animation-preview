@@ -29,8 +29,8 @@
       "path": "lang/de.json"
     }
   ],
-  "minimumCoreVersion": "0.8.6",
-  "compatibleCoreVersion": "0.8.9",
+  "minimumCoreVersion": "9",
+  "compatibleCoreVersion": "10",
   "manifestPlusVersion": "1.2.0",
   "bugs": "https://github.com/eXaminator/foundry-animation-preview/issues",
   "changelog": "https://raw.githubusercontent.com/eXaminator/foundry-animation-preview/__VERSION__/CHANGELOG.md",
