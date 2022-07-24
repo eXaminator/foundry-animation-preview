@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "foundry-animation-preview",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "repository": "https://github.com/eXaminator/foundry-animation-preview",
   "scripts": {

@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/eXaminator/foundry-animation-preview/compare/1.0.4...1.0.5) (2022-07-24)
+
+
+### Bug Fixes
+
+* update auto-release to 1.1.4 ([23cef7a](https://github.com/eXaminator/foundry-animation-preview/commit/23cef7a9dede60b2706af24b11dc3512af61c25f))
+
 ## [1.0.4](https://github.com/eXaminator/foundry-animation-preview/compare/1.0.3...1.0.4) (2022-07-24)
 
 
