@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/eXaminator/foundry-animation-preview/compare/1.0.5...2.0.0) (2025-09-07)
+
+
+### Features
+
+* add support for FoundryVTT v13 ([8c6f7a2](https://github.com/eXaminator/foundry-animation-preview/commit/8c6f7a23466465bf83a48665ce7c40743057e5c8)), closes [#7](https://github.com/eXaminator/foundry-animation-preview/issues/7)
+
+
+### BREAKING CHANGES
+
+* This removes support for all versions prior to v13. Use an older version of this library.
+
 ## [1.0.5](https://github.com/eXaminator/foundry-animation-preview/compare/1.0.4...1.0.5) (2022-07-24)
 
 
