@@ -1,0 +1,21 @@
+services:
+    foundry:
+        image: 'felddy/foundryvtt:13'
+        environment:
+            TZ: Europe/Berlin
+            FOUNDRY_WORLD: 'test'
+            FOUNDRY_HOT_RELOAD: true
+        secrets:
+            - source: config_json
+              target: config.json
+        volumes:
+            - ./data:/data
+            - ./src:/data/Data/modules/animation-preview
+        init: true
+        restart: unless-stopped
+        ports:
+            - '30000:30000'
+
+secrets:
+    config_json:
+        file: ./secrets.json

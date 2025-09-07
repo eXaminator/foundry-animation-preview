@@ -3,39 +3,101 @@ on:
     push:
         branches:
             - main
+            - rc
 jobs:
     release:
         name: Release
         runs-on: ubuntu-latest
         steps:
-            -   name: Checkout
-                uses: actions/checkout@v2
-                with:
-                    fetch-depth: 0
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-            -   name: Setup Node.js
-                uses: actions/setup-node@v1
-                with:
-                    node-version: 14
+            - name: Setup Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 22
 
-            -   name: Install dependencies
-                run: npm i
+            - name: Install dependencies
+              run: npm ci
 
-            -   name: Build
-                run: npm run build
+            - name: Checks
+              run: npm run check
 
-            -   name: Release
-                id: create-release
-                uses: docker://codfish/semantic-release-action:latest
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Tests
+              run: npm run test
 
-            -   name: Deploy on FoundryVTT
-                if: steps.create-release.outputs.new-release-published == 'true'
-                uses: eXaminator/foundry-auto-release@1.1.4
-                with:
-                    manifest-path: dist/module.json
-                    package-id: ${{ secrets.FVTT_PACKAGE_ID }}
-                    fvtt-username: ${{ secrets.FVTT_USERNAME }}
-                    fvtt-password: ${{ secrets.FVTT_PASSWORD }}
+            - name: Build
+              run: npm run build
 
+            - name: Release
+              id: semantic_release
+              uses: codfish/semantic-release-action@v2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Create module zip
+              if: steps.semantic_release.outputs.new-release-published == 'true'
+              run: cd ./dist && zip -r ../module.zip .
+
+            - name: Create Github Release
+              if: steps.semantic_release.outputs.new-release-published == 'true'
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ steps.semantic_release.outputs.release-version }}
+                  release_name: ${{ steps.semantic_release.outputs.release-version }}
+                  body: ${{ steps.semantic_release.outputs.release-notes }}
+                  draft: false
+                  prerelease: ${{ contains(steps.semantic_release.outputs.release-version, '-rc.') }}
+
+            - name: Upload module.json
+              if: steps.semantic_release.outputs.new-release-published == 'true'
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: dist/module.json
+                  asset_name: module.json
+                  asset_content_type: application/json
+
+            - name: Upload module.zip
+              if: steps.semantic_release.outputs.new-release-published == 'true'
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: module.zip
+                  asset_name: module.zip
+                  asset_content_type: application/zip
+
+            - name: Read module.json
+              id: module
+              if: steps.semantic_release.outputs.new-release-published == 'true' && !contains(steps.semantic_release.outputs.release-version, '-rc.')
+              run: |
+                  echo 'module<<ENDOFMODULE' >> $GITHUB_OUTPUT
+                  cat dist/module.json >> $GITHUB_OUTPUT
+                  echo 'ENDOFMODULE' >> $GITHUB_OUTPUT
+            - name: Deploy on FoundryVTT
+              if: steps.semantic_release.outputs.new-release-published == 'true' && !contains(steps.semantic_release.outputs.release-version, '-rc.')
+              uses: fjogeleit/http-request-action@v1
+              with:
+                  url: 'https://api.foundryvtt.com/_api/packages/release_version'
+                  method: 'POST'
+                  customHeaders: '{"Authorization": "${{secrets.FVTT_RELEASE_TOKEN}}"}'
+                  preventFailureOnNoResponse: 'true'
+                  data: |
+                      {
+                        "id": "${{ fromJSON(steps.module.outputs.module).id }}",
+                        "release": {
+                          "version": "${{ fromJSON(steps.module.outputs.module).version }}",
+                          "manifest": "${{ fromJSON(steps.module.outputs.module).manifest }}",
+                          "notes": "${{ fromJSON(steps.module.outputs.module).url }}/releases/tag/${{ fromJSON(steps.module.outputs.module).version }}",
+                          "compatibility": ${{ toJSON(fromJSON(steps.module.outputs.module).compatibility) }}
+                        }
+                      }

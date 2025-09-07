@@ -1,14 +1,14 @@
-.filepicker .video-parent {
+.files-list .video-parent {
     position: relative;
 }
 
-.filepicker .video-parent:after {
+.files-list .video-parent:after {
     position: absolute;
     top: calc(50% - 10px);
     left: calc(50% - 10px);
 
     font-weight: 900;
-    font-family: 'Font Awesome 5 Free';
+    font-family: var(--font-awesome);
     content: '\f04b';
 
     display: block;
@@ -25,21 +25,25 @@
     transition: opacity .2s;
 }
 
-.filepicker .thumbs-list .video-parent:after {
+.files-list.details .video-parent:after {
+    display: none;
+}
+
+.files-list.thumbs .video-parent:after {
     left: 18px;
 }
 
-.filepicker .video-parent:hover:after {
+.files-list .video-parent:hover:after {
     opacity: 0;
 }
 
-.filepicker .video-parent.-loading:hover:after {
+.files-list .video-parent.-loading:hover:after {
     opacity: .8;
     content: '\f021';
     animation: animation-preview-spin 1.5s linear infinite;
 }
 
-.filepicker .video-preview {
+.files-list .video-preview {
     box-sizing: border-box;
     border: 1px solid #000;
     border-radius: 2px;
@@ -47,13 +51,15 @@
     position: relative;
 }
 
-.filepicker .tiles-list li .video-preview {
+.files-list.tiles li .video-preview {
     border: none;
     margin: 0;
     object-fit: contain;
+    height: 100px;
+    width: 100px;
 }
 
-.filepicker .images-list li .video-preview {
+.files-list.images li .video-preview {
     width: 100%;
     height: 200px;
     object-fit: contain;
@@ -61,12 +67,16 @@
     border: none;
 }
 
-.filepicker .thumbs-list .video-preview {
+.files-list.thumbs .video-preview {
     flex: 0 0 48px;
     object-fit: cover;
     object-position: 50% 50%;
     margin-right: 10px;
     border: none;
+}
+
+.files-list.details .video-preview {
+    display: none;
 }
 
 @keyframes animation-preview-spin {

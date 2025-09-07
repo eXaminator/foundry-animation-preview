@@ -1,34 +1,62 @@
 Hooks.on('renderFilePicker', (filePicker, html) => {
-    html.find('[data-src="icons/svg/video.svg"]:visible').each((idx, img) => {
-        const $img = $(img);
-        const $parent = $img.closest('[data-path]');
-        const path = $parent.data('path');
-        const width = $img.attr('width');
-        const height = $img.attr('height');
-        const $video = $(`<video class="fas video-preview" loop width="${width}" height="${height}"></video>`);
-        $img.replaceWith($video);
+    // Supported video formats
+    const videoFormats = ['.webm', '.mp4', '.ogg', '.ogv', '.avi', '.mov', '.wmv', '.flv', '.mkv'];
 
-        const video = $video.get(0);
+    // Function to check if a path ends with a video format
+    const isVideoFile = (path) => {
+        if (!path) return false;
+        return videoFormats.some(format => path.toLowerCase().endsWith(format));
+    };
+
+    // Find all elements with data-path attribute
+    const allElements = html.querySelectorAll('.file[data-path]');
+    console.log('Elements with data-path:', allElements);
+
+    allElements.forEach((element) => {
+        // Check if element is visible
+        if (element.offsetParent === null) return;
+
+        const path = element.dataset.path;
+        if (!isVideoFile(path)) return;
+
+        // Find the image element within this container
+        const img = element.querySelector('img');
+        if (!img) return;
+
+        const width = img.getAttribute('width');
+        const height = img.getAttribute('height');
+
+        // Create video element
+        const video = document.createElement('video');
+        video.className = 'video-preview';
+        video.loop = true;
+        video.width = width;
+        video.height = height;
+
+        // Replace img with video
+        img.parentNode.replaceChild(video, img);
+
         let playTimeout = null;
-        $parent.addClass('video-parent -loading');
+        element.classList.add('video-parent', '-loading');
 
         video.addEventListener('loadeddata', () => {
-            $parent.removeClass('-loading');
+            element.classList.remove('-loading');
         }, false);
 
-        $parent.hover(
-            () => {
-                playTimeout = setTimeout(() => {
-                    if (!video.src) video.src = path;
-                    video.currentTime = 0;
-                    video.play().catch(e => console.error(e));
-                }, !!video.src ? 0 : 750);
-            },
-            () => {
-                clearTimeout(playTimeout);
-                video.pause();
+        // Add hover event listeners
+        element.addEventListener('mouseenter', () => {
+            if (element.parentNode.classList.contains('details')) return;
+            playTimeout = setTimeout(() => {
+                if (!video.src) video.src = path;
                 video.currentTime = 0;
-            },
-        );
+                video.play().catch(e => console.error(e));
+            }, video.src ? 0 : 750);
+        });
+
+        element.addEventListener('mouseleave', () => {
+            clearTimeout(playTimeout);
+            video.pause();
+            video.currentTime = 0;
+        });
     });
 });
